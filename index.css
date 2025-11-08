@@ -1,13 +1,98 @@
+body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+.card { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 4, 0, 0.05); }
+.btn-primary { background-image: linear-gradient(to right, #10B981, #059669); transition: all 0.2s; }
+.btn-primary:hover { background-image: linear-gradient(to right, #059669, #047857); }
+.btn-llm { background-image: linear-gradient(to right, #EF4444, #DC2626); transition: all 0.2s; }
+.btn-llm:hover { background-image: linear-gradient(to right, #DC2626, #B91C1C); }
+.btn-standard { background-image: linear-gradient(to right, #3B82F6, #2563EB); transition: all 0.2s; }
+.btn-standard:hover { background-image: linear-gradient(to right, #2563EB, #1D4ED8); }
+.btn-delete { background-color: #EF4444; transition: background-color 0.2s; }
+.btn-delete:hover { background-color: #DC2626; }
+#image-canvas { border: 2px solid #D1D5DB; background-color: #F3F4F6; cursor: crosshair; }
 
-        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
-        .card { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 4, 0, 0.05); }
-        .btn-primary { background-image: linear-gradient(to right, #10B981, #059669); transition: all 0.2s; }
-        .btn-primary:hover { background-image: linear-gradient(to right, #059669, #047857); }
-        .btn-llm { background-image: linear-gradient(to right, #EF4444, #DC2626); transition: all 0.2s; }
-        .btn-llm:hover { background-image: linear-gradient(to right, #DC2626, #B91C1C); }
-        .btn-standard { background-image: linear-gradient(to right, #3B82F6, #2563EB); transition: all 0.2s; }
-        .btn-standard:hover { background-image: linear-gradient(to right, #2563EB, #1D4ED8); }
-        .btn-delete { background-color: #EF4444; transition: background-color 0.2s; }
-        .btn-delete:hover { background-color: #DC2626; }
-        #image-canvas { border: 2px solid #D1D5DB; background-color: #F3F4F6; cursor: crosshair; }
-   
+/* Markdown-style formatting for LLM output */
+#llm-output {
+    line-height: 1.7;
+    color: #374151;
+}
+
+#llm-output h1, #llm-output h2, #llm-output h3 {
+    font-weight: 700;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    color: #1f2937;
+}
+
+#llm-output h1 {
+    font-size: 1.5em;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.3em;
+}
+
+#llm-output h2 {
+    font-size: 1.3em;
+    color: #059669;
+}
+
+#llm-output h3 {
+    font-size: 1.1em;
+    color: #2563eb;
+}
+
+#llm-output p {
+    margin: 0.8em 0;
+}
+
+#llm-output strong {
+    font-weight: 600;
+    color: #111827;
+}
+
+#llm-output ul, #llm-output ol {
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+}
+
+#llm-output li {
+    margin: 0.3em 0;
+}
+
+#llm-output table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    font-size: 0.9em;
+}
+
+#llm-output table th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+    padding: 0.6em;
+    text-align: left;
+    border: 1px solid #d1d5db;
+}
+
+#llm-output table td {
+    padding: 0.6em;
+    border: 1px solid #d1d5db;
+}
+
+#llm-output table tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+#llm-output code {
+    background-color: #f3f4f6;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+#llm-output blockquote {
+    border-left: 4px solid #3b82f6;
+    padding-left: 1em;
+    margin: 1em 0;
+    color: #6b7280;
+    font-style: italic;
+}

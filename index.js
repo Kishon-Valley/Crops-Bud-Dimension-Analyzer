@@ -364,7 +364,7 @@
                 report += `| ${ann.label} | ${widthCm.toFixed(2)} | ${heightCm.toFixed(2)} | **${areaCm2.toFixed(2)}** |\n`;
             });
 
-            llmOutputDiv.textContent = report;
+            llmOutputDiv.innerHTML = parseMarkdown(report);
             loadingIndicator.classList.add('hidden');
             downloadReportBtn.disabled = false;
             
@@ -490,6 +490,44 @@
             reader.readAsDataURL(file);
         }
 
+        // --- MARKDOWN PARSER ---
+        
+        /**
+         * Simple markdown to HTML converter for formatting LLM output
+         */
+        function parseMarkdown(markdown) {
+            let html = markdown;
+            
+            // Headers
+            html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+            
+            // Bold
+            html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
+            
+            // Tables
+            html = html.replace(/\|(.+)\|\n\|[-:\s|]+\|\n((\|.+\|\n?)+)/g, function(match, header, body) {
+                const headers = header.split('|').filter(h => h.trim()).map(h => `<th>${h.trim()}</th>`).join('');
+                const rows = body.trim().split('\n').map(row => {
+                    const cells = row.split('|').filter(c => c.trim()).map(c => `<td>${c.trim()}</td>`).join('');
+                    return `<tr>${cells}</tr>`;
+                }).join('');
+                return `<table><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
+            });
+            
+            // Line breaks to paragraphs
+            html = html.split('\n\n').map(para => {
+                if (!para.trim()) return '';
+                if (para.startsWith('<h') || para.startsWith('<table') || para.startsWith('<ul') || para.startsWith('<ol')) {
+                    return para;
+                }
+                return `<p>${para.replace(/\n/g, '<br>')}</p>`;
+            }).join('');
+            
+            return html;
+        }
+        
         // --- GEMINI API MULTIMODAL INTEGRATION ---
         
         async function generateAIAnalysis() {
@@ -538,7 +576,8 @@
 
                 const text = result.text || "Sorry, I couldn't generate an analysis. Please check your image and try again.";
                 
-                llmOutputDiv.textContent = `### 🔬 AI Descriptive Analysis\n\n${text}`;
+                const markdownText = `### 🔬 AI Descriptive Analysis\n\n${text}`;
+                llmOutputDiv.innerHTML = parseMarkdown(markdownText);
 
             } catch (error) {
                 console.error("Gemini API Error:", error);
