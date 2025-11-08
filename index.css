@@ -95,11 +95,22 @@ body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
     margin: 1em 0;
     color: #6b7280;
     font-style: italic;
-}.thumbnail{
-   position: relative;
-   top: 0.5px;
-   left: 550px;
-   width: 80px;
-   height: 70px;
+}.thumbnail {
+    width: 6rem; /* 96px - equivalent to w-24 */
+    height: 6rem; /* 96px - equivalent to h-24 */
     border-radius: 50%;
+    border: 3px solid #e5e7eb;
+    transition: transform 0.2s ease-in-out;
+}
+
+.thumbnail:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive sizing for larger screens */
+@media (min-width: 640px) {
+    .thumbnail {
+        width: 8rem; /* 128px - equivalent to sm:w-32 */
+        height: 8rem; /* 128px - equivalent to sm:h-32 */
+    }
 }
