@@ -95,4 +95,11 @@ body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
     margin: 1em 0;
     color: #6b7280;
     font-style: italic;
+}.thumbnail{
+   position: relative;
+   top: 0.5px;
+   left: 550px;
+   width: 80px;
+   height: 70px;
+    border-radius: 50%;
 }
