@@ -1,0 +1,13 @@
+
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .card { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 4, 0, 0.05); }
+        .btn-primary { background-image: linear-gradient(to right, #10B981, #059669); transition: all 0.2s; }
+        .btn-primary:hover { background-image: linear-gradient(to right, #059669, #047857); }
+        .btn-llm { background-image: linear-gradient(to right, #EF4444, #DC2626); transition: all 0.2s; }
+        .btn-llm:hover { background-image: linear-gradient(to right, #DC2626, #B91C1C); }
+        .btn-standard { background-image: linear-gradient(to right, #3B82F6, #2563EB); transition: all 0.2s; }
+        .btn-standard:hover { background-image: linear-gradient(to right, #2563EB, #1D4ED8); }
+        .btn-delete { background-color: #EF4444; transition: background-color 0.2s; }
+        .btn-delete:hover { background-color: #DC2626; }
+        #image-canvas { border: 2px solid #D1D5DB; background-color: #F3F4F6; cursor: crosshair; }
+   

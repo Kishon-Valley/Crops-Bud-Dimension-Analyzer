@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSIR-Crops Bud Dimension Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="p-4 sm:p-8 min-h-screen">
+
+    <div id="app" class="max-w-6xl mx-auto">
+        <header class="text-center mb-8">
+            <!-- CSIR Logo (Using a placeholder image URL for the logo) -->
+            <img src="https://i.imgur.com/r62YmD4.png" alt="CSIR Logo" class="mx-auto mb-4 w-24 h-24 sm:w-32 sm:h-32 object-contain">
+            <h1 class="4xl font-extrabold text-gray-800 tracking-tight">
+                CSIR-<span class="text-emerald-500">Crops Bud Dimension Analyzer</span>
+            </h1>
+            <p id="user-info" class="text-sm text-gray-400 mt-2"></p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Image Upload and Canvas -->
+            <div class="lg:col-span-2 space-y-4">
+                <div class="card bg-white p-4 rounded-xl">
+                    <input type="file" id="image-upload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                </div>
+                
+                <div class="card bg-white rounded-xl overflow-hidden shadow-lg relative">
+                    <canvas id="image-canvas" class="w-full"></canvas>
+                    <p id="canvas-placeholder" class="absolute inset-0 flex items-center justify-center text-gray-400 text-lg pointer-events-none hidden">Upload an image to start annotating.</p>
+                </div>
+            </div>
+
+            <!-- Right Column: Controls and LLM Output -->
+            <div class="lg:col-span-1 space-y-4">
+                
+                <!-- Annotations List -->
+                <div class="card bg-white p-4 rounded-xl">
+                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Annotations (<span id="bud-count">0</span>)</h2>
+                    <p class="text-xs text-blue-500 mb-2">Click **Set as Standard** next to any bud below to define the baseline.</p>
+                    <div id="annotations-list" class="space-y-2 max-h-48 overflow-y-auto">
+                        <p class="text-sm text-gray-500" id="no-annotations">Draw a box on the image to create the first annotation.</p>
+                    </div>
+                    <button id="clear-annotations-btn" class="mt-4 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-red-600 transition duration-150 ease-in-out" disabled>
+                        Clear All Annotations
+                    </button>
+                </div>
+
+                <!-- Dimension Comparison Feature -->
+                <div class="card bg-white p-4 rounded-xl">
+                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Dimension Standard</h2>
+                    
+                    <!-- Input Fields for Real-World Size -->
+                    <div id="standard-input-fields" class="mb-4 space-y-2 p-2 bg-gray-50 rounded-lg border">
+                        <label for="standard-width-cm" class="block text-xs font-medium text-gray-600">Standard Bud Real Width (cm)</label>
+                        <input type="number" id="standard-width-cm" placeholder="e.g., 5.0" min="0.1" step="0.1" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500" value="1.0">
+                        
+                        <label for="standard-height-cm" class="block text-xs font-medium text-gray-600">Standard Bud Real Height (cm)</label>
+                        <input type="number" id="standard-height-cm" placeholder="e.g., 3.5" min="0.1" step="0.1" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500" value="1.0">
+                    </div>
+                    
+                    <p id="standard-info" class="text-sm text-blue-600 font-bold mb-3 p-2 bg-blue-50 rounded-lg">Standard Bud: None Set</p>
+                    <button id="run-comparison-btn" class="btn-primary text-white font-semibold py-3 px-4 rounded-lg shadow-md w-full disabled:opacity-50 disabled:cursor-not-allowed transition" disabled>
+                        ⚖️ Run Dimension Comparison
+                    </button>
+                    <button id="ai-analyze-btn" class="btn-llm text-white font-semibold py-3 px-4 rounded-lg shadow-md w-full mt-3 disabled:opacity-50 disabled:cursor-not-allowed transition" disabled>
+                        🔬 Analyze with AI
+                    </button>
+                    <!-- Download Button -->
+                    <button id="download-report-btn" class="bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md w-full mt-3 disabled:opacity-50 disabled:cursor-not-allowed transition hover:bg-indigo-700" disabled>
+                        ⬇️ Download Report (.md)
+                    </button>
+                    <div id="loading-indicator" class="hidden text-center mt-3 text-indigo-600 font-medium">
+                        <p>Processing...</p>
+                    </div>
+                </div>
+
+                <!-- LLM Output Display -->
+                <div class="card bg-white p-4 rounded-xl">
+                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Analysis & Dimension Report</h2>
+                    <div id="llm-output" class="text-sm text-gray-600 whitespace-pre-wrap min-h-[150px] bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        The report will appear here. Start by setting a standard or running an AI analysis.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <footer class="mt-12 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
+            <p>Designed by Roland O.J Nimako and Felix O. Mensah. Copyright reserved 2025.</p>
+        </footer>
+    </div>
+
+    <script type="module" src="index.js"></script>
+</body>
+</html>
