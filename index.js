@@ -200,11 +200,21 @@
 
         function getMousePos(event) {
             const rect = canvas.getBoundingClientRect();
-            // Use clientX/Y for touch/mouse position
-            const clientX = event.clientX || event.touches?.[0]?.clientX;
-            const clientY = event.clientY || event.touches?.[0]?.clientY;
-
-            if (clientX === undefined) return { x: 0, y: 0 };
+            let clientX, clientY;
+            
+            // Handle touch events
+            if (event.touches && event.touches.length > 0) {
+                clientX = event.touches[0].clientX;
+                clientY = event.touches[0].clientY;
+            }
+            // Handle mouse events
+            else if (event.clientX !== undefined && event.clientY !== undefined) {
+                clientX = event.clientX;
+                clientY = event.clientY;
+            }
+            else {
+                return { x: 0, y: 0 };
+            }
 
             return {
                 x: clientX - rect.left,
@@ -658,16 +668,31 @@
             standardWidthCmInput.addEventListener('change', saveState);
             standardHeightCmInput.addEventListener('change', saveState);
 
-            // Canvas drawing listeners (using standard mouse and basic touch events)
+            // Canvas drawing listeners (mouse events)
             canvas.addEventListener('mousedown', onMouseDown);
             canvas.addEventListener('mousemove', onMouseMove);
             canvas.addEventListener('mouseup', onMouseUp);
             canvas.addEventListener('mouseout', (e) => { if (isDrawing) onMouseUp(e); }); 
             
-            // Touch events for Chromebook/mobile
-            canvas.addEventListener('touchstart', (e) => onMouseDown(e.touches[0]));
-            canvas.addEventListener('touchmove', (e) => onMouseMove(e.touches[0]));
-            canvas.addEventListener('touchend', onMouseUp);
+            // Touch events for mobile devices
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent scrolling
+                onMouseDown(e);
+            }, { passive: false });
+            
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault(); // Prevent scrolling
+                onMouseMove(e);
+            }, { passive: false });
+            
+            canvas.addEventListener('touchend', (e) => {
+                e.preventDefault(); // Prevent default touch behavior
+                onMouseUp(e);
+            }, { passive: false });
+            
+            canvas.addEventListener('touchcancel', (e) => {
+                if (isDrawing) onMouseUp(e);
+            });
 
             window.addEventListener('resize', () => {
                 if (currentImage) {

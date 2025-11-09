@@ -8,7 +8,16 @@ body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
 .btn-standard:hover { background-image: linear-gradient(to right, #2563EB, #1D4ED8); }
 .btn-delete { background-color: #EF4444; transition: background-color 0.2s; }
 .btn-delete:hover { background-color: #DC2626; }
-#image-canvas { border: 2px solid #D1D5DB; background-color: #F3F4F6; cursor: crosshair; }
+#image-canvas { 
+    border: 2px solid #D1D5DB; 
+    background-color: #F3F4F6; 
+    cursor: crosshair; 
+    touch-action: none; /* Prevent default touch behaviors like scrolling and zooming */
+    user-select: none; /* Prevent text selection on touch */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
 
 /* Markdown-style formatting for LLM output */
 #llm-output {
